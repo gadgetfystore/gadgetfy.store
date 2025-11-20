@@ -144,13 +144,6 @@ const ProductManagement = () => {
       minWidth: '200px',
     },
     {
-      name: 'Description',
-      selector: row => row.description || 'N/A',
-      sortable: true,
-      wrap: true,
-      minWidth: '300px',
-    },
-    {
       name: 'Link',
       cell: row => (
         <a 
@@ -286,7 +279,7 @@ const ProductManagement = () => {
                 required
               />
             </div>
-            <div className="space-y-2">
+               <div className="space-y-2">
               <Label htmlFor="add-description">Description</Label>
               <Textarea
                 id="add-description"

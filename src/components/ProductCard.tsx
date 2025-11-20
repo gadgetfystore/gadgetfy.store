@@ -1,9 +1,9 @@
-import { ExternalLink, Eye } from 'lucide-react';
+import { ExternalLink } from 'lucide-react';
 import { Button } from './ui/button';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from './ui/card';
+import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from './ui/card';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 interface ProductCardProps {
   id: string;
@@ -16,6 +16,10 @@ interface ProductCardProps {
 const ProductCard = ({ id, name, description, imageUrl, externalLink }: ProductCardProps) => {
   const { user } = useAuth();
   const navigate = useNavigate();
+
+  const truncate = (text: string, max: number) => {
+    return text.length > max ? text.substring(0, max) + "..." : text;
+  };
 
   const trackClick = async (clickType: 'buy' | 'details') => {
     try {
@@ -35,40 +39,50 @@ const ProductCard = ({ id, name, description, imageUrl, externalLink }: ProductC
     window.open(externalLink, '_blank', 'noopener,noreferrer');
   };
 
-  const handleDetailsClick = () => {
+  const handleDetailsClick = (e: React.MouseEvent) => {
+    e.preventDefault();
     trackClick('details');
     navigate(`/product/${id}`);
   };
 
   return (
-    <Card className="group overflow-hidden transition-all hover:shadow-lg">
-      <div className="aspect-square overflow-hidden bg-muted">
-        {imageUrl ? (
-          <img
-            src={imageUrl}
-            alt={name}
-            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-          />
-        ) : (
-          <div className="flex h-full w-full items-center justify-center text-muted-foreground">
-            No Image
-          </div>
-        )}
-      </div>
-      <CardHeader>
-        <CardTitle className="line-clamp-1">{name}</CardTitle>
+    <Card className="group overflow-hidden transition-all hover:shadow-sm w-[150px] sm:w-[230px] w-full">
+      <Link to={`/product/${id}`} onClick={handleDetailsClick}>
+        <div className="h-[110px] sm:h-[150px] overflow-hidden bg-muted">
+          {imageUrl ? (
+            <img
+              src={imageUrl}
+              alt={name}
+              className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+            />
+          ) : (
+            <div className="flex h-full w-full items-center justify-center text-muted-foreground text-xs">
+              No Image
+            </div>
+          )}
+        </div>
+      </Link>
+
+      <CardHeader className="p-2">
+        <Link to={`/product/${id}`} onClick={handleDetailsClick}>
+          <CardTitle className="line-clamp-1 text-xs">{name}</CardTitle>
+        </Link>
+
         {description && (
-          <CardDescription className="line-clamp-2">{description}</CardDescription>
+          <CardDescription className="text-[10px] text-muted-foreground">
+            {truncate(description, 20)}
+          </CardDescription>
         )}
       </CardHeader>
-      <CardFooter className="flex gap-2">
-        <Button onClick={handleBuyClick} className="flex-1" size="sm">
-          <ExternalLink className="mr-2 h-4 w-4" />
-          Buy Now
-        </Button>
-        <Button onClick={handleDetailsClick} variant="outline" className="flex-1" size="sm">
-          <Eye className="mr-2 h-4 w-4" />
-          Details
+
+      <CardFooter className="flex p-2 pt-0">
+        <Button 
+          onClick={handleBuyClick}
+          size="sm"
+          className="w-full h-6 text-[10px] px-2"
+        >
+          <ExternalLink className="mr-1 h-3 w-3" />
+          Buy
         </Button>
       </CardFooter>
     </Card>

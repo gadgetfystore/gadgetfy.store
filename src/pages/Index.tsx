@@ -31,13 +31,13 @@ const Index = () => {
       const { data, error, count } = await query;
 
       if (error) throw error;
-      
+
       if (pageNum === 1) {
         setProducts(data || []);
       } else {
         setProducts(prev => [...prev, ...(data || [])]);
       }
-      
+
       setHasMore(data && data.length === ITEMS_PER_PAGE && (count || 0) > pageNum * ITEMS_PER_PAGE);
     } catch (error) {
       console.error('Error fetching products:', error);
@@ -77,7 +77,7 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      
+
       <div className="container mx-auto px-4 py-8">
         <div className="mb-12 text-center">
           <h1 className="mb-4 text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
@@ -86,7 +86,7 @@ const Index = () => {
           <p className="mx-auto max-w-2xl text-lg text-muted-foreground">
             Browse our curated collection of premium products, handpicked just for you.
           </p>
-          
+
           <div className="mx-auto mt-8 max-w-md">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
@@ -112,19 +112,21 @@ const Index = () => {
           </div>
         ) : (
           <>
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              {products.map((product) => (
-                <ProductCard
-                  key={product.id}
-                  id={product.id}
-                  name={product.name}
-                  description={product.description}
-                  imageUrl={product.image_url}
-                  externalLink={product.external_link}
-                />
-              ))}
+            <div className="w-full max-w-6xl mx-auto px-4 sm:px-12 lg:px-18">
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
+                {products.map((product) => (
+                  <ProductCard
+                    key={product.id}
+                    id={product.id}
+                    name={product.name}
+                    description={product.description}
+                    imageUrl={product.image_url}
+                    externalLink={product.external_link}
+                  />
+                ))}
+              </div>
             </div>
-            
+
             {hasMore && (
               <div ref={observerTarget} className="flex items-center justify-center py-8">
                 {loading && (
@@ -132,7 +134,7 @@ const Index = () => {
                 )}
               </div>
             )}
-            
+
             {!hasMore && products.length > 0 && (
               <p className="mt-8 text-center text-sm text-muted-foreground">
                 No more products to load
