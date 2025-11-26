@@ -45,7 +45,7 @@ const Auth = () => {
           <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary">
             <ShoppingBag className="h-6 w-6 text-primary-foreground" />
           </div>
-          <CardTitle className="text-2xl">Welcome to GadgetFy Store</CardTitle>
+          <CardTitle className="text-2xl">Welcome to EchoDeals Store</CardTitle>
           <CardDescription>Sign in to your account</CardDescription>
         </CardHeader>
         <CardContent>
