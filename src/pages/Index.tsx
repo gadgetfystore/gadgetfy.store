@@ -4,6 +4,7 @@ import ProductCard from '@/components/ProductCard';
 import Navbar from '@/components/Navbar';
 import { Input } from '@/components/ui/input';
 import { Search } from 'lucide-react';
+import SkeletonProductCard from '@/components/SkeletonProductCard';
 
 const ITEMS_PER_PAGE = 12;
 
@@ -75,18 +76,17 @@ const Index = () => {
   }, [page, searchQuery, fetchProducts]);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-[image:var(--gradient-premium)] dark:bg-[image:var(--gradient-premium-dark)]">
       <Navbar />
 
       <div className="container mx-auto px-4 py-8">
         <div className="mb-12 text-center">
-          <h1 className="mb-4 text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
-            Discover Amazing Products
-          </h1>
-          <p className="mx-auto max-w-2xl text-lg text-muted-foreground">
-            Browse our curated collection of premium products, handpicked just for you.
-          </p>
-
+          <img
+            src="/images/echodeals.png" 
+            alt="Echo Deals Logo"
+            className="mx-auto h-24 sm:h-32 lg:h-40"
+          />
+        
           <div className="mx-auto mt-8 max-w-md">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
@@ -95,15 +95,19 @@ const Index = () => {
                 placeholder="Search products..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10"
+                className="pl-10 bg-card text-card-foreground"
               />
             </div>
           </div>
         </div>
 
         {loading && page === 1 ? (
-          <div className="flex items-center justify-center py-12">
-            <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+          <div className="px-2 sm:px-6 lg:px-16">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
+              {Array.from({ length: 8 }).map((_, i) => (
+                <SkeletonProductCard key={i} />
+              ))}
+            </div>
           </div>
         ) : products.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-12 text-center">
@@ -142,6 +146,16 @@ const Index = () => {
             )}
           </>
         )}
+        {loading && page > 1 && (
+          <div className="px-2 sm:px-6 lg:px-16 mt-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
+              {Array.from({ length: 4 }).map((_, i) => (
+                <SkeletonProductCard key={i} />
+              ))}
+            </div>
+          </div>
+        )}
+
       </div>
     </div>
   );
